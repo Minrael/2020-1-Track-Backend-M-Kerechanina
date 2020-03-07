@@ -1,0 +1,15 @@
+source ./venv/bin/activate //virtual environment
+deactivate
+
+
+gunicorn --workers 4 myapp:handler //to run gunicorn //application server
+
+
+pip3 freeze > requirements.txt //after install by pip
+
+
+sudo /etc/init.d/nginx start // start and stop nginx // web server
+sudo nginx -s stop
+
+
+
