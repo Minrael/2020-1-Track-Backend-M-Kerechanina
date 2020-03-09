@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Send message</title>
+</head>
+<body>
+    <h1>Send message</h1>
+    <form method = "POST">{% csrf_token %}{{form.as_p}}<button type="submit">Save</button></form>
+</body>
+</html>
