@@ -1,9 +1,27 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseNotAllowed
 from django.views.decorators.http import require_GET, require_POST
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 from chats.models import Chat, Member, Message
 from chats.forms import ChatForm, MessageForm
-from datetime import datetime
+from user.models import User
+from django.utils import timezone
+
+
+def item_name(name_for_cache):
+  def get_my_item(function):
+    def wrapper( *args, **kwargs):
+      rv = cache.get(name_for_cache)
+      if rv is None:
+        rv = function(*args, **kwargs)
+        cache.set(name_for_cache, rv, timeout=5*60)
+      print(rv)
+      #import ipdb
+      #ipdb.set_trace(s)
+      return rv
+    return wrapper
+  return get_my_item
 
 
 def index_page(request):
@@ -16,7 +34,7 @@ def chat_list(request):
     )
     return JsonResponse({'data': list(chats)})
 
-@require_GET
+'''
 def chat_page(request, chat_id):
     if (request.method == 'GET'):
         return JsonResponse({'chat': {
@@ -26,19 +44,24 @@ def chat_page(request, chat_id):
         }})
     else:
         return HttpResponseNotAllowed(['GET'])
+'''
 
-def chat_detail(request, chat_id):
-    chat = get_object_or_404(Chat, id = chat_id)
+@require_GET
+def chat_page(request, chat_id):
+    chat = Chat.objects.filter(id = chat_id).values(
+        'id', 'topic'
+    ).first()
     return JsonResponse({
-        'data':{'id': chat_id, 'topic': chat.topic}
+        'data':{'chat': chat}
     })
+
 
 @require_GET
 def user_chat_list(request, user_id):
         chat_list = {}
         member = Member.objects.filter(user_id=user_id)
         for m in member:
-            chat = Chat.objects.filter(id = m['chat_id'] )
+            chat = Chat.objects.filter(id = m.chat_id).first()
             chat_list.append(chat)
         return JsonResponse(chat_list)
 
@@ -52,27 +75,44 @@ def create_pers_chat(request):
         chat.save()
     return JsonResponse({'new chat': chat.topic})
 
-
+@require_GET
 def search_user(request):
-    pass
+    user = User.objects.all().values('username').first()
+    return JsonResponse({'user': user})
 
+'''
 def send_message(request):
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
-            message = form.save(commit = False)
-            message.added_at = datetime.now()
+            message = Message.objects.create(content = form.content, user = form.user, chat = form.chat, added_at = timezone.now())
+            print(message)
             message.save()
             return JsonResponse({'msg':'message saved'})
         return JsonResponse({'errors':form.errors}, status=400)
     else:
         form = MessageForm()
     return render(request, 'send_message.html',{'form': form})
+'''
 
+@require_POST
+def send_message(request):
+        form = MessageForm(request.POST)
+        print(request.POST)
+        print(form)
+        if form.is_valid():
+            message = form.save(commit = False)
+            message.added_at = timezone.now()
+            message.save()
+            return JsonResponse({'msg':'message saved'})
+        return JsonResponse({'errors': form.errors}, status=400)
 
 @require_GET
+#@item_name('messages')
+# @cache_page(60*15)
 def chat_message_list(request):
-    messages = Message.objects.filter(chat_id = 1).values('content')
+    print(request.GET)
+    messages = Message.objects.all().values('content')
     return JsonResponse({'messages':list(messages)})
 
 def read_message(request):

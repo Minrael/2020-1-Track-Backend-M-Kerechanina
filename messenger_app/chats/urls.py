@@ -1,4 +1,4 @@
-from chats.views import index_page, chat_list, chat_page, user_chat_list, send_message, chat_message_list
+from chats.views import index_page, chat_list, chat_page, user_chat_list, send_message, chat_message_list, search_user
 from django.urls import path
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
   path('chat_page/<int:chat_id>', chat_page, name='chat_page'),
   path('send_message/', send_message, name='send_message'),
   path('chat_message_list/', chat_message_list, name='chat_message_list'),
+  path('search_user/', search_user, name='search_user'),
 ]
