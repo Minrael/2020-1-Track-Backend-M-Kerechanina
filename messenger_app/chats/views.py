@@ -117,7 +117,7 @@ def send_message(request):
 
 @require_GET
 #@item_name('messages')
-# @cache_page(60*15)
+#@cache_page(60*15)
 def chat_message_list(request):
     #print(request.GET)
     messages = Message.objects.all().values('content')

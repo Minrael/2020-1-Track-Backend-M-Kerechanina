@@ -1,6 +1,8 @@
+from django.conf import settings
+
+settings.configure(DEBUG=True)
 from user.models import User
 from chats.user_factory import RandomUserFactory
-
 
 def createUsers():
     user1 = RandomUserFactory.create()
