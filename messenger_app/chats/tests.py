@@ -9,24 +9,38 @@ from django.utils import timezone
 class TestChatList(TestCase):
     def setUp(self):
         self.client = Client()
-        self.chat = Chat.objects.create(topic='chat1', is_group_chat=False)
-        #self.user1 = User.objects.create(username = 'user1')
+        self.chat1 = Chat.objects.create(topic='chat1', is_group_chat=False)
         self.user1 = RandomUserFactory.create()
         self.user1.save()
         self.member = Member.objects.create(
             user=self.user1,
-            chat=self.chat,
-            new_messages_count=0,
-            last_message = Message.objects.create(content='', user = self.user1, chat = self.chat, added_at = timezone.now())
+            chat=self.chat1,
+            new_messages_count=0
         )
-        self.message_0 = Message.objects.create(content = 'Yes!', user = self.user1, chat = self.chat, added_at = timezone.now())
+
+    def test_chat_message_list_is_empty(self):
+        response = self.client.get('/chats/chat_message_list/')
+        content = json.loads(response.content)
+        self.assertFalse(content['messages'])
+
+    def test_chat_message_list(self):
+        self.message1 = Message.objects.create(content='Hey!', chat=self.chat1, user=self.user1, added_at = timezone.now())
+        self.message2 = Message.objects.create(content='He', chat=self.chat1, user=self.user1, added_at = timezone.now())
+        self.message3 = Message.objects.create(content='Bye!', chat=self.chat1, user=self.user1, added_at = timezone.now())
+        response = self.client.get('/chats/chat_message_list/')
+        content = json.loads(response.content)
+        self.assertEqual(len(content['messages']), 3)
 
     def test_send_message(self):
-        response_1 = self.client.post('/chats/send_message/', {'content':'123', 'user': self.user1, 'chat': self.chat})
-        #print(self.chat.id)
-        #print(response_1)
+        response = self.client.post('/chats/send_message/', {'content':'Hey!', 'chat': self.chat1.id, 'user': self.user1.id})
+        messages = Message.objects.all().values('content')
+        self.assertEqual(list(messages), [{'content': 'Hey!'}] )
+
+    def test_send_message_and_reseve(self):
+        response_1 = self.client.post('/chats/send_message/', {'content':'Hey!', 'chat': self.chat1.id, 'user': self.user1.id})
         response_2 = self.client.get('/chats/chat_message_list/')
-        self.assertEqual(response_2.content, "{'messages': [{'content': 'Hey!'}]}")
+        content = json.loads(response_2.content)
+        self.assertDictEqual(content, {"messages": [{"content": "Hey!"}]})
 
 
     def test_send_message_failed(self):

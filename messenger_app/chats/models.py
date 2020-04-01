@@ -4,7 +4,7 @@ from user.models import User
 class Chat(models.Model):
     topic = models.CharField(max_length=32, null=False, default='topic1')
     is_group_chat = models.BooleanField(default=False)
-    last_messege = models.ForeignKey(to='Message', on_delete=models.CASCADE, null=True, related_name = 'last_messege_id')
+    last_message = models.ForeignKey(to='Message', on_delete=models.CASCADE, null=True, related_name = 'last_messege_id')
 
     class Meta:
         verbose_name = 'Чат'
@@ -24,7 +24,7 @@ class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     chat = models.ForeignKey('Chat', on_delete=models.CASCADE)
     new_messages_count = models.IntegerField()
-    last_message = models.ForeignKey('Message', on_delete=models.CASCADE)
+    last_message = models.ForeignKey('Message', null=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = ''

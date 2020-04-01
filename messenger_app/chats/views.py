@@ -5,6 +5,7 @@ from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from chats.models import Chat, Member, Message
 from chats.forms import ChatForm, MessageForm
+from user.forms import UserForm
 from user.models import User
 from django.utils import timezone
 
@@ -80,29 +81,36 @@ def search_user(request):
     user = User.objects.all().values('username').first()
     return JsonResponse({'user': user})
 
-'''
-def send_message(request):
+
+def send_message_with_html(request):
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
-            message = Message.objects.create(content = form.content, user = form.user, chat = form.chat, added_at = timezone.now())
-            print(message)
+            message = form.save(commit = False)
+            message.added_at = timezone.now()
+            message.user = User.objects.filter(id = 1).first()
+            message.chat = Chat.objects.filter(id = 1).first()
             message.save()
+            #message = Message.objects.create(
+            #    content = form.content,
+            #    user = form.user,
+            #    chat = form.chat,
+            #   added_at = timezone.now())
             return JsonResponse({'msg':'message saved'})
         return JsonResponse({'errors':form.errors}, status=400)
     else:
         form = MessageForm()
-    return render(request, 'send_message.html',{'form': form})
-'''
+    return render(request, 'send_message_with_html.html',{'form': form})
+
 
 @require_POST
 def send_message(request):
         form = MessageForm(request.POST)
-        print(request.POST)
-        print(form)
         if form.is_valid():
             message = form.save(commit = False)
             message.added_at = timezone.now()
+            message.user = User.objects.filter(id = request.POST['user']).first()
+            message.chat = Chat.objects.filter(id = request.POST['chat']).first()
             message.save()
             return JsonResponse({'msg':'message saved'})
         return JsonResponse({'errors': form.errors}, status=400)
@@ -111,7 +119,7 @@ def send_message(request):
 #@item_name('messages')
 # @cache_page(60*15)
 def chat_message_list(request):
-    print(request.GET)
+    #print(request.GET)
     messages = Message.objects.all().values('content')
     return JsonResponse({'messages':list(messages)})
 
