@@ -4,3 +4,5 @@ messenger/
 *.swp
 hints/
 messenger_app/application/local_settings.py
+
+myscript
