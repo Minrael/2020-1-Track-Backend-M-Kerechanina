@@ -78,18 +78,11 @@ WSGI_APPLICATION = 'application.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'messenger_app',
-        'USER': 'messenger_app',
-        'PASSWORD': '123',
-        'HOST': '127.0.0.1',
+        'NAME': 'maria',
+        'USER': 'maria',
+        'PASSWORD': 'ZNuZ4yjEK87qQ9',
+        'HOST': '89.208.199.161',
         'PORT': '5432',
-        'TEST': {
-            'NAME': 'test_messenger',
-            'USER': 'messenger_app',
-            'PASSWORD': '123',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
     }
 }
 

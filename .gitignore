@@ -1,5 +1,6 @@
-venv/
+messenger/
 *.pyc
 *.swo
 *.swp
 hints/
+messenger_app/application/local_settings.py
