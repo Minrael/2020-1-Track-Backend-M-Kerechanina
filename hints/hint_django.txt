@@ -1,2 +1,0 @@
-./manage.py startapp chats //creating the app named chats
-
