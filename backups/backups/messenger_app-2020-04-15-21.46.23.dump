@@ -1,0 +1,1394 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO messenger_app;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO messenger_app;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO messenger_app;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO messenger_app;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO messenger_app;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO messenger_app;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: chats_attachment; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.chats_attachment (
+    id integer NOT NULL,
+    type character varying(64) NOT NULL,
+    chat_id integer NOT NULL,
+    message_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.chats_attachment OWNER TO messenger_app;
+
+--
+-- Name: chats_attachment_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.chats_attachment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.chats_attachment_id_seq OWNER TO messenger_app;
+
+--
+-- Name: chats_attachment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.chats_attachment_id_seq OWNED BY public.chats_attachment.id;
+
+
+--
+-- Name: chats_chat; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.chats_chat (
+    id integer NOT NULL,
+    topic character varying(32) NOT NULL,
+    is_group_chat boolean NOT NULL,
+    last_message_id integer
+);
+
+
+ALTER TABLE public.chats_chat OWNER TO messenger_app;
+
+--
+-- Name: chats_chat_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.chats_chat_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.chats_chat_id_seq OWNER TO messenger_app;
+
+--
+-- Name: chats_chat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.chats_chat_id_seq OWNED BY public.chats_chat.id;
+
+
+--
+-- Name: chats_member; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.chats_member (
+    id integer NOT NULL,
+    new_messages_count integer NOT NULL,
+    chat_id integer NOT NULL,
+    last_message_id integer,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.chats_member OWNER TO messenger_app;
+
+--
+-- Name: chats_member_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.chats_member_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.chats_member_id_seq OWNER TO messenger_app;
+
+--
+-- Name: chats_member_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.chats_member_id_seq OWNED BY public.chats_member.id;
+
+
+--
+-- Name: chats_message; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.chats_message (
+    id integer NOT NULL,
+    content text NOT NULL,
+    added_at timestamp with time zone NOT NULL,
+    chat_id integer NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.chats_message OWNER TO messenger_app;
+
+--
+-- Name: chats_message_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.chats_message_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.chats_message_id_seq OWNER TO messenger_app;
+
+--
+-- Name: chats_message_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.chats_message_id_seq OWNED BY public.chats_message.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO messenger_app;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO messenger_app;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO messenger_app;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO messenger_app;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO messenger_app;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO messenger_app;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO messenger_app;
+
+--
+-- Name: user_user; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.user_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL,
+    avatar character varying(100)
+);
+
+
+ALTER TABLE public.user_user OWNER TO messenger_app;
+
+--
+-- Name: user_user_groups; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.user_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.user_user_groups OWNER TO messenger_app;
+
+--
+-- Name: user_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.user_user_groups_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_user_groups_id_seq OWNER TO messenger_app;
+
+--
+-- Name: user_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.user_user_groups_id_seq OWNED BY public.user_user_groups.id;
+
+
+--
+-- Name: user_user_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.user_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_user_id_seq OWNER TO messenger_app;
+
+--
+-- Name: user_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.user_user_id_seq OWNED BY public.user_user.id;
+
+
+--
+-- Name: user_user_user_permissions; Type: TABLE; Schema: public; Owner: messenger_app
+--
+
+CREATE TABLE public.user_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.user_user_user_permissions OWNER TO messenger_app;
+
+--
+-- Name: user_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: messenger_app
+--
+
+CREATE SEQUENCE public.user_user_user_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_user_user_permissions_id_seq OWNER TO messenger_app;
+
+--
+-- Name: user_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: messenger_app
+--
+
+ALTER SEQUENCE public.user_user_user_permissions_id_seq OWNED BY public.user_user_user_permissions.id;
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: chats_attachment id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_attachment ALTER COLUMN id SET DEFAULT nextval('public.chats_attachment_id_seq'::regclass);
+
+
+--
+-- Name: chats_chat id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_chat ALTER COLUMN id SET DEFAULT nextval('public.chats_chat_id_seq'::regclass);
+
+
+--
+-- Name: chats_member id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_member ALTER COLUMN id SET DEFAULT nextval('public.chats_member_id_seq'::regclass);
+
+
+--
+-- Name: chats_message id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_message ALTER COLUMN id SET DEFAULT nextval('public.chats_message_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: user_user id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user ALTER COLUMN id SET DEFAULT nextval('public.user_user_id_seq'::regclass);
+
+
+--
+-- Name: user_user_groups id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_groups ALTER COLUMN id SET DEFAULT nextval('public.user_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: user_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.user_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can view log entry	1	view_logentry
+5	Can add permission	2	add_permission
+6	Can change permission	2	change_permission
+7	Can delete permission	2	delete_permission
+8	Can view permission	2	view_permission
+9	Can add group	3	add_group
+10	Can change group	3	change_group
+11	Can delete group	3	delete_group
+12	Can view group	3	view_group
+13	Can add content type	4	add_contenttype
+14	Can change content type	4	change_contenttype
+15	Can delete content type	4	delete_contenttype
+16	Can view content type	4	view_contenttype
+17	Can add session	5	add_session
+18	Can change session	5	change_session
+19	Can delete session	5	delete_session
+20	Can view session	5	view_session
+21	Can add Пользователь	6	add_user
+22	Can change Пользователь	6	change_user
+23	Can delete Пользователь	6	delete_user
+24	Can view Пользователь	6	view_user
+25	Can add 	7	add_attachment
+26	Can change 	7	change_attachment
+27	Can delete 	7	delete_attachment
+28	Can view 	7	view_attachment
+29	Can add Чат	8	add_chat
+30	Can change Чат	8	change_chat
+31	Can delete Чат	8	delete_chat
+32	Can view Чат	8	view_chat
+33	Can add 	9	add_member
+34	Can change 	9	change_member
+35	Can delete 	9	delete_member
+36	Can view 	9	view_member
+37	Can add Сообщение	10	add_message
+38	Can change Сообщение	10	change_message
+39	Can delete Сообщение	10	delete_message
+40	Can view Сообщение	10	view_message
+\.
+
+
+--
+-- Data for Name: chats_attachment; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.chats_attachment (id, type, chat_id, message_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: chats_chat; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.chats_chat (id, topic, is_group_chat, last_message_id) FROM stdin;
+1	A	f	\N
+2	chat1	f	\N
+3	chat1	f	\N
+\.
+
+
+--
+-- Data for Name: chats_member; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.chats_member (id, new_messages_count, chat_id, last_message_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: chats_message; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.chats_message (id, content, added_at, chat_id, user_id) FROM stdin;
+2	adw	2020-03-09 03:00:00+03	1	1
+3	adw	2020-03-09 03:23:00+03	1	1
+4	trh	2020-03-09 18:08:47.979394+03	1	1
+5	mes_new	2020-03-09 18:29:22.452657+03	1	1
+6	cache	2020-03-11 19:24:02.483991+03	1	1
+7	srg	2020-03-11 19:29:41.713098+03	1	1
+8	cache2	2020-03-11 19:30:20.624584+03	1	1
+9	aw3r	2020-03-25 23:30:55.349987+03	1	1
+10	jjjjjj	2020-03-26 00:01:36.274957+03	1	1
+11	srtg	2020-04-01 01:06:55.114892+03	2	2
+12	aefr	2020-04-01 01:07:22.244984+03	2	1
+13	aet4	2020-04-01 01:09:50.391736+03	1	1
+14	wef	2020-04-01 20:56:36.276761+03	1	1
+15	444444	2020-04-01 20:57:02.364304+03	1	1
+16	my_message	2020-04-01 22:11:32.123441+03	1	1
+17	my_message	2020-04-01 22:47:21.107763+03	1	1
+18	my_message	2020-04-01 22:47:42.285148+03	1	1
+19	my_message	2020-04-01 22:47:58.605503+03	1	1
+20	my_message	2020-04-01 22:48:11.934611+03	1	1
+21	my_message	2020-04-02 00:29:39.372172+03	1	1
+22	git	2020-04-08 16:55:42.454479+03	1	1
+23	yes!	2020-04-08 16:59:01.725946+03	1	1
+24	sef	2020-04-08 17:01:08.707552+03	1	1
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	contenttypes	contenttype
+5	sessions	session
+6	user	user
+7	chats	attachment
+8	chats	chat
+9	chats	member
+10	chats	message
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2020-03-08 01:58:05.762768+03
+2	contenttypes	0002_remove_content_type_name	2020-03-08 01:58:05.770636+03
+3	auth	0001_initial	2020-03-08 01:58:05.799404+03
+4	auth	0002_alter_permission_name_max_length	2020-03-08 01:58:05.82312+03
+5	auth	0003_alter_user_email_max_length	2020-03-08 01:58:05.829414+03
+6	auth	0004_alter_user_username_opts	2020-03-08 01:58:05.837903+03
+7	auth	0005_alter_user_last_login_null	2020-03-08 01:58:05.845177+03
+8	auth	0006_require_contenttypes_0002	2020-03-08 01:58:05.854451+03
+9	auth	0007_alter_validators_add_error_messages	2020-03-08 01:58:05.862218+03
+10	auth	0008_alter_user_username_max_length	2020-03-08 01:58:05.868701+03
+11	auth	0009_alter_user_last_name_max_length	2020-03-08 01:58:05.875398+03
+12	auth	0010_alter_group_name_max_length	2020-03-08 01:58:05.88945+03
+13	auth	0011_update_proxy_permissions	2020-03-08 01:58:05.895945+03
+14	user	0001_initial	2020-03-08 01:58:05.920428+03
+15	admin	0001_initial	2020-03-08 01:58:05.955493+03
+16	admin	0002_logentry_remove_auto_add	2020-03-08 01:58:05.979194+03
+17	admin	0003_logentry_add_action_flag_choices	2020-03-08 01:58:05.988572+03
+18	chats	0001_initial	2020-03-08 01:58:06.016764+03
+19	chats	0002_auto_20200307_2258	2020-03-08 01:58:06.108299+03
+20	sessions	0001_initial	2020-03-08 01:58:06.132949+03
+21	chats	0003_auto_20200331_2257	2020-04-01 01:57:57.153094+03
+22	chats	0004_remove_chat_last_message	2020-04-01 01:59:38.979066+03
+23	chats	0005_auto_20200331_2301	2020-04-01 02:01:07.053877+03
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+2ji1dx42uts2qpafvfteoygcyq4u0esv	NDY3N2I1NDU1NmZiZGI2NDc2ZTVhMDdhMzAwOTRjNzViMzBhZDA0YTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmNjk0Y2RjZTU2NWU3MmFhMWRmNWYxYWMwZmZjYjMxYmZlMzJhYTdlIn0=	2020-03-22 01:59:56.354641+03
+\.
+
+
+--
+-- Data for Name: user_user; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.user_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined, avatar) FROM stdin;
+1	pbkdf2_sha256$150000$mSKolhNhRfyZ$zM0dj6G36HIGDnQrXbdj4YblR2SvR8A4dqkuERkddeo=	2020-03-08 01:59:56.348352+03	t	root			root@root.ru	t	t	2020-03-08 01:59:38.440369+03	
+2	123	\N	f	test_user				f	t	2020-03-29 00:36:30.509504+03	
+3		\N	f	user1				f	t	2020-03-30 16:13:22.227762+03	
+\.
+
+
+--
+-- Data for Name: user_user_groups; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.user_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: user_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: messenger_app
+--
+
+COPY public.user_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 40, true);
+
+
+--
+-- Name: chats_attachment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.chats_attachment_id_seq', 1, false);
+
+
+--
+-- Name: chats_chat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.chats_chat_id_seq', 3, true);
+
+
+--
+-- Name: chats_member_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.chats_member_id_seq', 1, true);
+
+
+--
+-- Name: chats_message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.chats_message_id_seq', 24, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
+
+
+--
+-- Name: user_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.user_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: user_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.user_user_id_seq', 3, true);
+
+
+--
+-- Name: user_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: messenger_app
+--
+
+SELECT pg_catalog.setval('public.user_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chats_attachment chats_attachment_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_attachment
+    ADD CONSTRAINT chats_attachment_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chats_chat chats_chat_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_chat
+    ADD CONSTRAINT chats_chat_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chats_member chats_member_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_member
+    ADD CONSTRAINT chats_member_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chats_message chats_message_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_message
+    ADD CONSTRAINT chats_message_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: user_user_groups user_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_groups
+    ADD CONSTRAINT user_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_user_groups user_user_groups_user_id_group_id_bb60391f_uniq; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_groups
+    ADD CONSTRAINT user_user_groups_user_id_group_id_bb60391f_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- Name: user_user user_user_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user
+    ADD CONSTRAINT user_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_user_user_permissions user_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_user_permissions
+    ADD CONSTRAINT user_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_user_user_permissions user_user_user_permissions_user_id_permission_id_64f4d5b8_uniq; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_user_permissions
+    ADD CONSTRAINT user_user_user_permissions_user_id_permission_id_64f4d5b8_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: user_user user_user_username_key; Type: CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user
+    ADD CONSTRAINT user_user_username_key UNIQUE (username);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: chats_attachment_chat_id_298338fd; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_attachment_chat_id_298338fd ON public.chats_attachment USING btree (chat_id);
+
+
+--
+-- Name: chats_attachment_message_id_5648db92; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_attachment_message_id_5648db92 ON public.chats_attachment USING btree (message_id);
+
+
+--
+-- Name: chats_attachment_user_id_174b0405; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_attachment_user_id_174b0405 ON public.chats_attachment USING btree (user_id);
+
+
+--
+-- Name: chats_chat_last_message_id_9a17bf77; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_chat_last_message_id_9a17bf77 ON public.chats_chat USING btree (last_message_id);
+
+
+--
+-- Name: chats_member_chat_id_120d4ca4; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_member_chat_id_120d4ca4 ON public.chats_member USING btree (chat_id);
+
+
+--
+-- Name: chats_member_last_message_id_d7b0fd9e; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_member_last_message_id_d7b0fd9e ON public.chats_member USING btree (last_message_id);
+
+
+--
+-- Name: chats_member_user_id_24200aab; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_member_user_id_24200aab ON public.chats_member USING btree (user_id);
+
+
+--
+-- Name: chats_message_chat_id_f3080004; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_message_chat_id_f3080004 ON public.chats_message USING btree (chat_id);
+
+
+--
+-- Name: chats_message_user_id_023d6a3e; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX chats_message_user_id_023d6a3e ON public.chats_message USING btree (user_id);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: user_user_groups_group_id_c57f13c0; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX user_user_groups_group_id_c57f13c0 ON public.user_user_groups USING btree (group_id);
+
+
+--
+-- Name: user_user_groups_user_id_13f9a20d; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX user_user_groups_user_id_13f9a20d ON public.user_user_groups USING btree (user_id);
+
+
+--
+-- Name: user_user_user_permissions_permission_id_ce49d4de; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX user_user_user_permissions_permission_id_ce49d4de ON public.user_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: user_user_user_permissions_user_id_31782f58; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX user_user_user_permissions_user_id_31782f58 ON public.user_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: user_user_username_e2bdfe0c_like; Type: INDEX; Schema: public; Owner: messenger_app
+--
+
+CREATE INDEX user_user_username_e2bdfe0c_like ON public.user_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_attachment chats_attachment_chat_id_298338fd_fk_chats_chat_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_attachment
+    ADD CONSTRAINT chats_attachment_chat_id_298338fd_fk_chats_chat_id FOREIGN KEY (chat_id) REFERENCES public.chats_chat(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_attachment chats_attachment_message_id_5648db92_fk_chats_message_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_attachment
+    ADD CONSTRAINT chats_attachment_message_id_5648db92_fk_chats_message_id FOREIGN KEY (message_id) REFERENCES public.chats_message(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_attachment chats_attachment_user_id_174b0405_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_attachment
+    ADD CONSTRAINT chats_attachment_user_id_174b0405_fk_user_user_id FOREIGN KEY (user_id) REFERENCES public.user_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_chat chats_chat_last_message_id_9a17bf77_fk_chats_message_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_chat
+    ADD CONSTRAINT chats_chat_last_message_id_9a17bf77_fk_chats_message_id FOREIGN KEY (last_message_id) REFERENCES public.chats_message(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_member chats_member_chat_id_120d4ca4_fk_chats_chat_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_member
+    ADD CONSTRAINT chats_member_chat_id_120d4ca4_fk_chats_chat_id FOREIGN KEY (chat_id) REFERENCES public.chats_chat(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_member chats_member_last_message_id_d7b0fd9e_fk_chats_message_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_member
+    ADD CONSTRAINT chats_member_last_message_id_d7b0fd9e_fk_chats_message_id FOREIGN KEY (last_message_id) REFERENCES public.chats_message(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_member chats_member_user_id_24200aab_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_member
+    ADD CONSTRAINT chats_member_user_id_24200aab_fk_user_user_id FOREIGN KEY (user_id) REFERENCES public.user_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_message chats_message_chat_id_f3080004_fk_chats_chat_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_message
+    ADD CONSTRAINT chats_message_chat_id_f3080004_fk_chats_chat_id FOREIGN KEY (chat_id) REFERENCES public.chats_chat(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: chats_message chats_message_user_id_023d6a3e_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.chats_message
+    ADD CONSTRAINT chats_message_user_id_023d6a3e_fk_user_user_id FOREIGN KEY (user_id) REFERENCES public.user_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_user_user_id FOREIGN KEY (user_id) REFERENCES public.user_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_user_groups user_user_groups_group_id_c57f13c0_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_groups
+    ADD CONSTRAINT user_user_groups_group_id_c57f13c0_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_user_groups user_user_groups_user_id_13f9a20d_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_groups
+    ADD CONSTRAINT user_user_groups_user_id_13f9a20d_fk_user_user_id FOREIGN KEY (user_id) REFERENCES public.user_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_user_user_permissions user_user_user_permi_permission_id_ce49d4de_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_user_permissions
+    ADD CONSTRAINT user_user_user_permi_permission_id_ce49d4de_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_user_user_permissions user_user_user_permissions_user_id_31782f58_fk_user_user_id; Type: FK CONSTRAINT; Schema: public; Owner: messenger_app
+--
+
+ALTER TABLE ONLY public.user_user_user_permissions
+    ADD CONSTRAINT user_user_user_permissions_user_id_31782f58_fk_user_user_id FOREIGN KEY (user_id) REFERENCES public.user_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

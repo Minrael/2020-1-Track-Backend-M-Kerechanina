@@ -8,6 +8,10 @@ from chats.forms import ChatForm, MessageForm
 from user.forms import UserForm
 from user.models import User
 from django.utils import timezone
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import viewsets
+from .serializers import ChatSerializer, MessageSerializer, AttachmentSerializer, MemberSerializer
 
 
 def item_name(name_for_cache):
@@ -125,3 +129,31 @@ def chat_message_list(request):
 
 def read_message(request):
     pass
+
+
+class ChatView(APIView):
+    def get(self, request):
+        chats = Chat.objects.all()
+        serializer = ChatSerializer(chats, many = True)
+        return Response({'chats':serializer.data})
+
+class ChatsViewSet(viewsets.ModelViewSet):
+    serializer_class = ChatSerializer
+    queryset = Chat.objects.all()
+
+    def chat_list(self, request):
+        serializer = self.get_serializer(many = True)
+        return Response({'chats': serializer.data})
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    serializer_class = MessageSerializer
+    queryset = Message.objects.all()
+
+    def chat_messages_list(self, request):
+        messages = self.queryset().filter(user_id = request.POST['user_id'])
+        return Response({'messages': messages})
+
+    def get_message(self, request):
+        pass
+
